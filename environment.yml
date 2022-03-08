@@ -1,0 +1,21 @@
+name: ml
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - black
+  - jupyter
+  - keras
+  - libblas[build=*mkl]
+  - matplotlib>=3.5
+  - mkl
+  - mkl-devel
+  - nbconvert
+  - numpy>=1.21
+  - pip
+  - pre-commit
+  - python=3.9
+  - scikit-learn
+  - scipy>=1.7
+  - setuptools>=42
+  - tensorflow
