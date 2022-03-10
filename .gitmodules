@@ -1,0 +1,3 @@
+[submodule "simsio"]
+	url = git@github.com:rgbmrc/simsio.git
+	branch = main

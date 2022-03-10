@@ -19,3 +19,5 @@ dependencies:
   - scipy>=1.7
   - setuptools>=42
   - tensorflow
+  - pip:
+    - -e simsio
