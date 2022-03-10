@@ -1,4 +1,5 @@
 # %%
+import pickle
 from itertools import product
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,10 +8,11 @@ from keras.models import Sequential, clone_model
 from keras.layers import Dense, Dropout
 
 L = 2
-EPOCHS = 100
-N = 2 ** np.arange(0, 2) * 1000
-perc_train = (0.5, 0.75)
-
+EPOCHS = 200
+N = 2 ** np.arange(0, 4) * 1000
+perc_train = np.arange(0.5, 1, 0.1)
+N = [4000]
+perc_train = [0.8]
 
 # %% data generation
 def func(x):
@@ -31,7 +33,7 @@ models = [
     Sequential(
         layers=[
             # input layer
-            Dense(L, input_shape=(L,), activation="relu"),
+            Dense(L, activation="relu"),
             # hidden layers
             Dense(20, activation="relu"),
             Dense(20, activation="relu"),
@@ -52,7 +54,8 @@ for mod, n, p in product(models, N, perc_train):
     fits[(mod.name, n, p)] = mod = clone_model(mod)
     mod.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
     n_train = int(n * p)
-    x, y = generate(n)
+    x, y = generate(n, B=100)
+    x /= 50
     mod.fit(
         x[:n_train],
         y[:n_train],
@@ -62,6 +65,7 @@ for mod, n, p in product(models, N, perc_train):
         verbose=0,
     )
 
+
 # %% loss vs epoch
 for f in fits.values():
     fig, ax = plt.subplots()
@@ -70,5 +74,25 @@ for f in fits.values():
     ax.set_xlabel("epoch")
     ax.set_ylabel("loss")
     ax.legend()
+
+# %%
+obs = "val_accuracy"
+plt.plot(perc_train, [f.history.history[obs][-1] for f in fits.values()], "o-")
+plt.ylabel(obs)
+plt.xlabel("perc_train")
+plt.grid()
+
+# %%
+lims = xmin, xmax = x.min(), x.max()
+grid = np.mgrid[xmin:xmax:100j, xmin:xmax:100j]
+_, mod = fits.copy().popitem()
+pred = mod.predict(grid.T)
+
+fig, axs = plt.subplots(1, 3, figsize=(16, 5.0))
+imkws = dict(origin="lower", extent=lims * 2)
+axs[0].scatter(*x.T, c=y)
+axs[0].margins(x=0, y=0)
+axs[1].imshow(pred, **imkws)
+axs[2].imshow(pred > 0.5, **imkws)
 
 # %%
