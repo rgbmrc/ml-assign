@@ -20,4 +20,4 @@ dependencies:
   - setuptools>=42
   - tensorflow
   - pip:
-    - -e simsio
+    - -e simsio[keras]
