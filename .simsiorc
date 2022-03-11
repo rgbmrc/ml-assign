@@ -1,5 +1,7 @@
 [IO-handlers]
 dat = out/$uid/$key, w, simsio.serializers.PickleSerializer
+log = out/$uid/log,  , simsio.serializers.LogSerializer
+par = out/$uid/par, w, simsio.serializers.YAMLSerializer
 
 [configs]
 directory = configs

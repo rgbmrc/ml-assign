@@ -1,0 +1,398 @@
+# from simsio import gen_configs
+# import numpy as np
+# params = {
+#     "N": 1000 * 2 ** np.arange(5),
+#     "train_frac": [0.6, 0.7, 0.8, 0.9],
+#     "augment_frac": [0.0, 0.5, 1.0],
+#     "augment_std": [0.05, 0.10],
+# }
+# gen_configs("template", params, "1")
+===:
+  template: |
+    n$enum:
+      <<<: common
+      input: {N: $N, train_frac: $train_frac, augment_frac: $augment_frac, augment_std: $augment_std}
+  common:
+    samples: 50
+    input:
+      box: 100
+    model:
+      name: model
+      layers:
+      - tf.keras.layers.Dense(2, activation="relu")
+      - tf.keras.layers.Dense(20, activation="relu")
+      - tf.keras.layers.Dense(20, activation="relu")
+      - tf.keras.layers.Dropout(0.2)
+      - tf.keras.layers.Dense(1, activation="sigmoid")
+    compile:
+      loss: binary_crossentropy
+      optimizer: adam
+      metrics: [accuracy]
+      steps_per_execution: 4
+    fit:
+      epochs: 500
+      batch_size: 50
+      verbose: 0
+n0:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.05}
+n1:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.1}
+n2:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.05}
+n3:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.1}
+n4:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.05}
+n5:
+  <<<: common
+  input: {N: 1000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.1}
+n6:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.05}
+n7:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.1}
+n8:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.05}
+n9:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.1}
+n10:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.05}
+n11:
+  <<<: common
+  input: {N: 1000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.1}
+n12:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.05}
+n13:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.1}
+n14:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.05}
+n15:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.1}
+n16:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.05}
+n17:
+  <<<: common
+  input: {N: 1000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.1}
+n18:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.05}
+n19:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.1}
+n20:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.05}
+n21:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.1}
+n22:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.05}
+n23:
+  <<<: common
+  input: {N: 1000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.1}
+n24:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.05}
+n25:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.1}
+n26:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.05}
+n27:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.1}
+n28:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.05}
+n29:
+  <<<: common
+  input: {N: 2000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.1}
+n30:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.05}
+n31:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.1}
+n32:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.05}
+n33:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.1}
+n34:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.05}
+n35:
+  <<<: common
+  input: {N: 2000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.1}
+n36:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.05}
+n37:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.1}
+n38:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.05}
+n39:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.1}
+n40:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.05}
+n41:
+  <<<: common
+  input: {N: 2000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.1}
+n42:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.05}
+n43:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.1}
+n44:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.05}
+n45:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.1}
+n46:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.05}
+n47:
+  <<<: common
+  input: {N: 2000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.1}
+n48:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.05}
+n49:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.1}
+n50:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.05}
+n51:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.1}
+n52:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.05}
+n53:
+  <<<: common
+  input: {N: 4000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.1}
+n54:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.05}
+n55:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.1}
+n56:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.05}
+n57:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.1}
+n58:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.05}
+n59:
+  <<<: common
+  input: {N: 4000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.1}
+n60:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.05}
+n61:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.1}
+n62:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.05}
+n63:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.1}
+n64:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.05}
+n65:
+  <<<: common
+  input: {N: 4000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.1}
+n66:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.05}
+n67:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.1}
+n68:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.05}
+n69:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.1}
+n70:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.05}
+n71:
+  <<<: common
+  input: {N: 4000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.1}
+n72:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.05}
+n73:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.1}
+n74:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.05}
+n75:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.1}
+n76:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.05}
+n77:
+  <<<: common
+  input: {N: 8000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.1}
+n78:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.05}
+n79:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.1}
+n80:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.05}
+n81:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.1}
+n82:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.05}
+n83:
+  <<<: common
+  input: {N: 8000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.1}
+n84:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.05}
+n85:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.1}
+n86:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.05}
+n87:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.1}
+n88:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.05}
+n89:
+  <<<: common
+  input: {N: 8000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.1}
+n90:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.05}
+n91:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.1}
+n92:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.05}
+n93:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.1}
+n94:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.05}
+n95:
+  <<<: common
+  input: {N: 8000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.1}
+n96:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.05}
+n97:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 0.0, augment_std: 0.1}
+n98:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.05}
+n99:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 0.5, augment_std: 0.1}
+n100:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.05}
+n101:
+  <<<: common
+  input: {N: 16000, train_frac: 0.6, augment_frac: 1.0, augment_std: 0.1}
+n102:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.05}
+n103:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 0.0, augment_std: 0.1}
+n104:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.05}
+n105:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 0.5, augment_std: 0.1}
+n106:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.05}
+n107:
+  <<<: common
+  input: {N: 16000, train_frac: 0.7, augment_frac: 1.0, augment_std: 0.1}
+n108:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.05}
+n109:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 0.0, augment_std: 0.1}
+n110:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.05}
+n111:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 0.5, augment_std: 0.1}
+n112:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.05}
+n113:
+  <<<: common
+  input: {N: 16000, train_frac: 0.8, augment_frac: 1.0, augment_std: 0.1}
+n114:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.05}
+n115:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 0.0, augment_std: 0.1}
+n116:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.05}
+n117:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 0.5, augment_std: 0.1}
+n118:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.05}
+n119:
+  <<<: common
+  input: {N: 16000, train_frac: 0.9, augment_frac: 1.0, augment_std: 0.1}
+
+
+
