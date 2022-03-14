@@ -23,14 +23,18 @@ def extract(sim, metric, epochs=1):
         sim.link(key, serializer="simsio.serializers.NPZSerializer")
         dat.append(sim.load(key)[metric])
     dat = np.asarray(dat)[:, -epochs:]
-    return dat.mean(), dat.std(), sim.par["monitoring"]["cpu_time"]
+    # exp = np.median(dat)
+    # dev = np.median(abs(dat - exp))
+    exp = np.mean(dat)
+    dev = np.std(dat)
+    return exp, dev, sim.par["monitoring"]["cpu_time"]
 
 
 dat = np.vectorize(extract)(ugrid, "val_accuracy", epochs=1)
 
 # %% plot
 def gridplot(slc, par):
-    fig = plt.figure(figsize=(20, 5))
+    fig = plt.figure(figsize=(15, 5))
     imgrid = ImageGrid(
         fig,
         111,
@@ -40,13 +44,13 @@ def gridplot(slc, par):
         share_all=True,
         cbar_mode="each",
     )
-    for ax, l, d in zip(imgrid, ("mean", "std. dev.", "cpu time"), dat):
+    for ax, l, d in zip(imgrid, ("median", "std. dev.", "cpu time"), dat):
         sm = ax.imshow(d[slc], origin="lower", cmap="magma")
-        for coord, p in zip(("y", "x"), par):
+        for axis, p in zip((ax.yaxis, ax.xaxis), par):
             v = vals[p]
-            getattr(ax, f"set_{coord}ticks")(np.arange(len(v)))
-            getattr(ax, f"set_{coord}ticklabels")(np.round(v, 1))
-            getattr(ax, f"set_{coord}label")(p)
+            axis.set_major_locator(mpl.ticker.FixedLocator(np.arange(len(v))))
+            axis.set_major_formatter(mpl.ticker.FixedFormatter(v))
+            axis.set_label_text(p)
         cbar = ax.cax.colorbar(sm)
         cbar.set_label(l)
     return fig, imgrid
@@ -55,5 +59,20 @@ def gridplot(slc, par):
 # %% plots
 fig, _ = gridplot(np.s_[:, :, 0, 0], ["input/N", "input/train_frac"])
 fig.savefig("N*train_frac.png")
-fig, _ = gridplot(np.s_[-2, :, :, -1], ["input/train_frac", "input/augment_frac"])
+fig, _ = gridplot(np.s_[-3, :, :, -1], ["input/train_frac", "input/augment_frac"])
 fig.savefig("train_frac*augment_frac.png")
+
+# %% ditributions
+metric = "val_accuracy"
+epochs = 5
+hist_dat = []
+for u in ugrid[-2, 1, 0, :]:
+    sim = get_sim(u)
+    for s in range(sim.par["samples"]):
+        key = f"history_{s}"
+        sim.link(key, serializer="simsio.serializers.NPZSerializer")
+        hist_dat.append(sim.load(key)[metric])
+hist_dat = np.asarray(hist_dat)[:, -epochs:]
+plt.hist(hist_dat.ravel())
+
+# %%
