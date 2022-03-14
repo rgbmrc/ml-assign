@@ -36,22 +36,22 @@ with run_sim() as sim:
         train, valid = generate(**sim.par["input"])
 
         # model
-        mod_pars = sim.par["model"].copy()
-        activation = mod_pars.pop("activation", None)
-        mod_pars["layers"] = [eval(l) for l in sim.par["model"]["layers"]]
-        mod = tf.keras.models.Sequential(**mod_pars)
+        model_pars = sim.par["model"].copy()
+        activation = model_pars.pop("activation", None)
+        model_pars["layers"] = [eval(l) for l in sim.par["model"]["layers"]]
+        mod = tf.keras.models.Sequential(**model_pars)
         sim[f"weights_{s}"] = mod
 
         # compile
+        compile_pars = sim.par["compile"].copy()
+        compile_pars["optimizer"] = tf.keras.optimizers.get(compile_pars["optimizer"])
         mod.compile(**sim.par["compile"])
 
         # fit
-        fit_pars = sim.par["fit"].copy()
-        fit_pars["optimizer"] = tf.keras.optimizers.get(fit_pars["optimizer"])
         fit = mod.fit(
             *train,
             validation_data=valid,
-            **fit_pars,
+            **sim.par["fit"],
         )
         sim[f"history_{s}"] = fit.history
 
