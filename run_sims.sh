@@ -2,4 +2,4 @@
 set -e
 source $HOME/tools/miniconda/etc/profile.d/conda.sh
 conda activate ml
-printf 'n%s\n' {0..119} | shuf | xargs -P8 -i python scripts/train.py 1 {} 1
+printf 'n%s\n' {0..24} | shuf | xargs -P4 -i python scripts/train2.py 2A {} 2

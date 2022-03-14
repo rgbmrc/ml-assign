@@ -1,4 +1,3 @@
-# %%
 import numpy as np
 import tensorflow as tf
 
@@ -26,22 +25,37 @@ def generate(N, box=1, train_frac=1.0, augment_frac=0.0, augment_std=0.1):
 with run_sim() as sim:
     sim.link("model", serializer=KerasModelSerializer())
     samples = sim.par["samples"]
-    train, valid = generate(**sim.par["input"])
+
     for s in range(samples):
+
+        # IO handles
         sim.link(f"weights_{s}", serializer=KerasWeightSerializer())
         sim.link(f"history_{s}", serializer=NPZSerializer())
 
+        # input
+        train, valid = generate(**sim.par["input"])
+
+        # model
         mod_pars = sim.par["model"].copy()
+        activation = mod_pars.pop("activation", None)
         mod_pars["layers"] = [eval(l) for l in sim.par["model"]["layers"]]
         mod = tf.keras.models.Sequential(**mod_pars)
         sim[f"weights_{s}"] = mod
+
+        # compile
         mod.compile(**sim.par["compile"])
+
+        # fit
+        fit_pars = sim.par["fit"].copy()
+        fit_pars["optimizer"] = tf.keras.optimizers.get(fit_pars["optimizer"])
         fit = mod.fit(
             *train,
             validation_data=valid,
-            **sim.par["fit"],
+            **fit_pars,
         )
         sim[f"history_{s}"] = fit.history
+
+        # dump
         sim.dump()
 
     sim[f"model"] = mod
