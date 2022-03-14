@@ -4,7 +4,9 @@ channels:
   - defaults
 dependencies:
   - black
+  - cxx-compiler
   - jupyter
+  - hickle
   - keras
   - libblas[build=*mkl]
   - matplotlib>=3.5
