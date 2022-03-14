@@ -1,0 +1,21 @@
+[IO-handlers]
+dat = out/$uid/$key, w, simsio.serializers.PickleSerializer
+log = out/$uid/log,  , simsio.serializers.LogSerializer
+par = out/$uid/par, w, simsio.serializers.YAMLSerializer
+
+[configs]
+directory = configs
+header_tag = ===
+header_ref = <<<
+lock_attempts = 100
+
+[versioning]
+git_revision = git rev-parse HEAD
+
+[logging-format]
+format = %(asctime)s %(levelname)-8s | %(message)s
+datefmt = %Y-%m-%d %H:%M
+
+[logging-levels]
+root = INFO
+simsio.iocore = WARNING

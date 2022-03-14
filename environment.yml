@@ -4,7 +4,9 @@ channels:
   - defaults
 dependencies:
   - black
+  - cxx-compiler
   - jupyter
+  - hickle
   - keras
   - libblas[build=*mkl]
   - matplotlib>=3.5
@@ -20,4 +22,4 @@ dependencies:
   - setuptools>=42
   - tensorflow
   - pip:
-    - -e simsio
+    - -e simsio[keras]
