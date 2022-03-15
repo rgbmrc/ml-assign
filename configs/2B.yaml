@@ -1,0 +1,197 @@
+# from simsio import gen_configs
+# import numpy as np
+# params = {
+#     "N": 1000 * 2 ** np.arange(5),
+#     "M": np.arange(5, 26, 5),
+# }
+# gen_configs("template", params, "2B")
+===:
+  template: |
+    n$enum:
+      <<<: common
+      input: {N: $N}
+      model: {M: $M}
+  common:
+    samples: 50
+    input:
+      box: 100
+      train_frac: 0.8
+      augment_frac: 0.0
+      augment_std: 0.0
+    model:
+      name: model
+      activation: elu
+      layers:
+      - tf.keras.layers.Dense(2, activation=activation)
+      - tf.keras.layers.Dense(M, activation=activation)
+      - tf.keras.layers.Dense(M, activation=activation)
+      - tf.keras.layers.Dropout(0.2)
+      - tf.keras.layers.Dense(1, activation="sigmoid")
+    compile:
+      optimizer: adam
+      loss: binary_crossentropy
+      metrics: [accuracy]
+      steps_per_execution: 4
+    fit:
+      epochs: 500
+      batch_size: 50
+      verbose: 0
+b369dea0a47b11ecbc3afa163efacce8:
+  <<<: common
+  input: {N: 1000}
+  model: {M: 5}
+b36db016a47b11ec9aa9fa163e595e79:
+  <<<: common
+  input: {N: 1000}
+  model: {M: 10}
+b36da9b8a47b11ec8d05fa163e595e79:
+  <<<: common
+  input: {N: 1000}
+  model: {M: 15}
+b369ef1ca47b11ecb517fa163efacce8:
+  <<<: common
+  input: {N: 1000}
+  model: {M: 20}
+b4520e96a47b11eca8a8fa163e209104:
+  <<<: common
+  input: {N: 1000}
+  model: {M: 25}
+b44efcc4a47b11ec8248fa163e04b9dc:
+  <<<: common
+  input: {N: 2000}
+  model: {M: 5}
+b36da79ca47b11ec94c5fa163e595e79:
+  <<<: common
+  input: {N: 2000}
+  model: {M: 10}
+b6ffc5aca47b11ec8a33fa163e66c7df:
+  <<<: common
+  input: {N: 2000}
+  model: {M: 15}
+cbe8bbcca47b11ec908dfa163ea6f025:
+  <<<: common
+  input: {N: 2000}
+  model: {M: 20}
+b369fbd8a47b11eca449fa163efacce8:
+  <<<: common
+  input: {N: 2000}
+  model: {M: 25}
+b369d45aa47b11ec916dfa163efacce8:
+  <<<: common
+  input: {N: 4000}
+  model: {M: 5}
+b89aad0aa47b11ecb7c5fa163e66c7df:
+  <<<: common
+  input: {N: 4000}
+  model: {M: 10}
+b83ff09aa47b11ec9704fa163ea6f025:
+  <<<: common
+  input: {N: 4000}
+  model: {M: 15}
+b44ef346a47b11ec9ca9fa163e04b9dc:
+  <<<: common
+  input: {N: 4000}
+  model: {M: 20}
+b45b14d2a47b11ecb511fa163e66c7df:
+  <<<: common
+  input: {N: 4000}
+  model: {M: 25}
+cb93075ca48211eca045fa163e595e79:
+  <<<: common
+  input: {N: 8000}
+  model: {M: 5}
+b451feb0a47b11ec95b0fa163e209104:
+  <<<: common
+  input: {N: 8000}
+  model: {M: 10}
+b4520608a47b11ec87e4fa163e209104:
+  <<<: common
+  input: {N: 8000}
+  model: {M: 15}
+b78e0bf0a47b11ec94cafa163e04b9dc:
+  <<<: common
+  input: {N: 8000}
+  model: {M: 20}
+b83c31b2a47b11ecbf88fa163ea6f025:
+  <<<: common
+  input: {N: 8000}
+  model: {M: 25}
+d319afd2a47b11ec8be8fa163e209104:
+  <<<: common
+  input: {N: 16000}
+  model: {M: 5}
+b36da9d6a47b11ec8bd4fa163e595e79:
+  <<<: common
+  input: {N: 16000}
+  model: {M: 10}
+b936782aa47b11ec9a85fa163e66c7df:
+  <<<: common
+  input: {N: 16000}
+  model: {M: 15}
+b44f1358a47b11ec90abfa163e04b9dc:
+  <<<: common
+  input: {N: 16000}
+  model: {M: 20}
+cb07edcca47b11ec9d9bfa163ea6f025:
+  <<<: common
+  input: {N: 16000}
+  model: {M: 25}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

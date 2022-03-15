@@ -1,0 +1,193 @@
+# from simsio import gen_configs
+# import numpy as np
+# params = {
+#     "K": np.arange(1, 5),
+#     "dropout": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+# }
+# gen_configs("template", params, "2C")
+===:
+  template: |
+    n$enum:
+      <<<: common
+      model: {<<<: mod$K, dropout: $dropout}
+  mod1:
+    layers:
+    - tf.keras.layers.Dense(2, activation=activation)
+    - tf.keras.layers.Dense(125, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(1, activation="sigmoid")
+  mod2:
+    layers:
+    - tf.keras.layers.Dense(2, activation=activation)
+    - tf.keras.layers.Dense(20, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(20, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(1, activation="sigmoid")
+  mod3:
+    layers:
+    - tf.keras.layers.Dense(2, activation=activation)
+    - tf.keras.layers.Dense(16, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(16, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(10, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(1, activation="sigmoid")
+  mod4:
+    layers:
+    - tf.keras.layers.Dense(2, activation=activation)
+    - tf.keras.layers.Dense(12, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(12, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(12, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(10, activation=activation)
+    - tf.keras.layers.Dropout(dropout)
+    - tf.keras.layers.Dense(1, activation="sigmoid")
+  common:
+    samples: 50
+    input:
+      N: 4000
+      box: 100
+      train_frac: 0.8
+      augment_frac: 0.0
+      augment_std: 0.0
+    model:
+      name: model
+      activation: elu
+    compile:
+      optimizer: adam
+      loss: binary_crossentropy
+      metrics: [accuracy]
+      steps_per_execution: 4
+    fit:
+      epochs: 500
+      batch_size: 50
+      verbose: 0
+a3ef6970a47d11ec805efa163e595e79:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.0}
+a4363f9ea47d11ec96c3fa163efacce8:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.1}
+a435d8e2a47d11ec96bcfa163efacce8:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.2}
+a3efaca0a47d11ec8f48fa163e595e79:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.3}
+aceffe0ea47d11ecbdb1fa163e66c7df:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.4}
+bb6d4e82a47d11eca694fa163e595e79:
+  <<<: common
+  model: {<<<: mod1, dropout: 0.5}
+a439d672a47d11ecb018fa163efacce8:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.0}
+a435dd38a47d11ec9fbffa163efacce8:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.1}
+a3ef33d8a47d11ecb9e7fa163e595e79:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.2}
+b484b024a47d11ec80a0fa163ea6f025:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.3}
+c99287d4a47d11ec99aafa163e04b9dc:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.4}
+abfc59d4a47d11ecb6b6fa163e04b9dc:
+  <<<: common
+  model: {<<<: mod2, dropout: 0.5}
+a803512aa47d11ecaf2dfa163e209104:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.0}
+a803736ca47d11ecb56ffa163e209104:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.1}
+b28d6af4a47d11ec8221fa163e66c7df:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.2}
+ac002d02a47d11ecbed2fa163e04b9dc:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.3}
+a8036494a47d11eca046fa163e209104:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.4}
+ac7438b4a47d11eca75afa163ea6f025:
+  <<<: common
+  model: {<<<: mod3, dropout: 0.5}
+a8036eeea47d11ecb670fa163e209104:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.0}
+cfeebdd2a47d11ecaa66fa163e66c7df:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.1}
+ac007fe6a47d11ec85d1fa163e04b9dc:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.2}
+22a6b7bea47e11ec9b04fa163ea6f025:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.3}
+f20b3c74a47d11ecb656fa163ea6f025:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.4}
+b2632a1ea47d11ecac50fa163e66c7df:
+  <<<: common
+  model: {<<<: mod4, dropout: 0.5}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
