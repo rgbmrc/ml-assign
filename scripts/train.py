@@ -37,6 +37,8 @@ with run_sim() as sim:
 
         # model
         model_pars = sim.par["model"].copy()
+        M = model_pars.pop("M", 20)
+        dropout = model_pars.pop("dropout", 0.2)
         activation = model_pars.pop("activation", None)
         model_pars["layers"] = [eval(l) for l in sim.par["model"]["layers"]]
         mod = tf.keras.models.Sequential(**model_pars)
