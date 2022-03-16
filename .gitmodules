@@ -2,3 +2,7 @@
 	url = git@github.com:rgbmrc/simsio.git
 	branch = main
 	path = simsio
+[submodule "mplotter"]
+	path = mplotter
+	branch = main
+	url = git@github.com:rgbmrc/mplotter.git
