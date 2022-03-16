@@ -1,0 +1,62 @@
+# PHYSREV STYLE
+# specify options (CAPITALIZED) in LATEX PROJECT PATH & PGF BACKEND section
+
+axes.labelpad: 4
+axes.titlepad: 6
+axes.xmargin: 0
+axes.ymargin: 0
+grid.alpha: 0.5
+lines.markersize: 2.5
+savefig.pad_inches: 0.015
+xtick.major.size: 2
+xtick.minor.size: 1
+ytick.major.size: 2
+ytick.minor.size: 1
+
+# LATEX PROJECT PATH & PGF BACKEND
+# (1) specify options (CAPITALIZED) and (2) set backend via
+# from matplotlib.backend_bases import register_backend
+# register_backend('pdf', 'matplotlib.backends.backend_pgf')
+text.usetex: True
+pgf.texsystem: xelatex  # for drafts use (faster) pdflatex
+savefig.dpi: 72.27  # pdflatex dpi
+font.family: serif
+savefig.format: pdf
+figure.figsize: 3.4039020340390205, 9.2985
+savefig.directory: figures
+# gf.preamble: \usepackage{revtex4-1}
+# ext.latex.preamble: \usepackage{revtex4-1}
+
+# SET FONT SIZE VALUE
+# to append to a STYLE.mplstyle file run
+# sed 's/8/VALUE/' fontsize.mplstyle >> STYLE.mplstyle
+font.size: 8
+axes.labelsize: 8
+axes.titlesize: 8
+figure.titlesize: 8
+legend.fontsize: 8
+legend.title_fontsize: 8
+xtick.labelsize: 8
+ytick.labelsize: 8
+
+# SET LINE WIDTH VALUE
+# to append to a STYLE.mplstyle file run
+# sed 's/0.6/VALUE/' linewidth.mplstyle >> STYLE.mplstyle
+patch.linewidth: 0.6
+axes.linewidth: 0.6
+boxplot.boxprops.linewidth: 0.6
+boxplot.capprops.linewidth: 0.6
+boxplot.flierprops.linewidth: 0.6
+boxplot.flierprops.markeredgewidth: 0.6
+boxplot.meanprops.linewidth: 0.6
+boxplot.medianprops.linewidth: 0.6
+boxplot.whiskerprops.linewidth: 0.6
+contour.linewidth: 0.6
+grid.linewidth: 0.6
+hatch.linewidth: 0.6
+lines.linewidth: 0.6
+lines.markeredgewidth: 0.6
+xtick.major.width: 0.6
+xtick.minor.width: 0.6
+ytick.major.width: 0.6
+ytick.minor.width: 0.6
