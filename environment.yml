@@ -10,8 +10,6 @@ dependencies:
   - keras
   - libblas[build=*mkl]
   - matplotlib>=3.5
-  - mkl
-  - mkl-devel
   - nbconvert
   - numpy>=1.21
   - pip
