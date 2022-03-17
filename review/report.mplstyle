@@ -18,14 +18,15 @@ ytick.minor.size: 1
 # from matplotlib.backend_bases import register_backend
 # register_backend('pdf', 'matplotlib.backends.backend_pgf')
 text.usetex: True
+pgf.rcfonts: False
 pgf.texsystem: xelatex  # for drafts use (faster) pdflatex
 savefig.dpi: 72.27  # pdflatex dpi
 font.family: serif
 savefig.format: pdf
 figure.figsize: 3.4039020340390205, 9.2985
 savefig.directory: figures
-# gf.preamble: \usepackage{revtex4-1}
-# ext.latex.preamble: \usepackage{revtex4-1}
+pgf.preamble:
+text.latex.preamble:
 
 # SET FONT SIZE VALUE
 # to append to a STYLE.mplstyle file run
