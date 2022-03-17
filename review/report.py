@@ -44,22 +44,22 @@ def gridplot(dat, vals, slc, par):
     """
     Plot simulation grid.
     """
-    fig = plt.figure(
-        ",".join((p.rsplit("/")[-1] for p in par)), figsize=plotter.fig_size(2, 0.15)
-    )
+    figname = ",".join((p.rsplit("/")[-1] for p in par))
+    fig = plt.figure(figname, figsize=plotter.fig_size(1, 0.25))
     imgrid = ImageGrid(
         fig,
         111,
         (1, len(dat)),
-        axes_pad=0.50,
-        cbar_pad=0.05,
+        axes_pad=0.09,
+        cbar_pad=0.09,
         cbar_size=0.06,
         share_all=True,
         cbar_mode="each",
+        cbar_location="top",
         label_mode="L",
     )
     for ax, l, d in zip(
-        imgrid, ("accuracy (mean)", "accuracy (std. dev.)", "train CPU-time [s]"), dat
+        imgrid, ("accuracy ($\mu$)", "accuracy ($\sigma$)", "train time [s]"), dat
     ):
         sm = ax.imshow(d[slc], origin="lower", cmap="magma")
         for axis, p in zip((ax.yaxis, ax.xaxis), par):
@@ -68,6 +68,8 @@ def gridplot(dat, vals, slc, par):
             axis.set_major_formatter(mpl.ticker.FixedFormatter(vs))
             # axis.set_label_text(p)
         cbar = ax.cax.colorbar(sm)
+        cbar.ax.xaxis.set_ticks_position("top")
+        cbar.ax.xaxis.set_label_position("top")
         cbar.set_label(l)
     return fig, imgrid
 
@@ -87,7 +89,7 @@ for ax in imgrid.axes_row[-1]:
     ax.set_xlabel("$\chi$")
 for ax in imgrid.axes_column[0]:
     ax.set_ylabel("$N$")
-# plotter.set_fig_size(fig)
+plotter.set_fig_size(fig)
 plotter.save_fig(fig)
 
 # %%
@@ -98,7 +100,7 @@ for ax in imgrid.axes_row[-1]:
     ax.set_xlabel("$\eta$")
 for ax in imgrid.axes_column[0]:
     ax.set_ylabel("$\chi$")
-# plotter.set_fig_size(fig)
+plotter.set_fig_size(fig)
 plotter.save_fig(fig)
 
 # endregion
@@ -127,8 +129,7 @@ for ax in imgrid.axes_row[-1]:
     ax.set_xticklabels(vals["model/activation"], rotation=90)
 for ax in imgrid.axes_column[0]:
     ax.set_ylabel("optimizer")
-imgrid[0].get
-# plotter.set_fig_size(fig)
+plotter.set_fig_size(fig)
 plotter.save_fig(fig)
 
 # endregion
@@ -145,7 +146,7 @@ for ax in imgrid.axes_row[-1]:
     ax.set_xlabel("$M$")
 for ax in imgrid.axes_column[0]:
     ax.set_ylabel("$N$")
-# plotter.set_fig_size(fig)
+plotter.set_fig_size(fig)
 plotter.save_fig(fig)
 
 # endregion
@@ -163,7 +164,7 @@ for ax in imgrid.axes_row[-1]:
     ax.set_xlabel("hidden layers")
 for ax in imgrid.axes_column[0]:
     ax.set_ylabel("dropout")
-# plotter.set_fig_size(fig)
+plotter.set_fig_size(fig)
 plotter.save_fig(fig, "dropout,layers")
 
 # endregion
