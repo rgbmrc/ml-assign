@@ -2,6 +2,7 @@
 # region defs
 
 from collections import defaultdict
+from itertools import product
 
 import numpy as np
 import tensorflow as tf
@@ -9,21 +10,21 @@ import tensorflow as tf
 
 def generate(N, box=1, train_frac=1.0, augment_frac=0.0, augment_std=0.1):
     """
-    This function generates the input data-set of N 2-dimensional points (x1,x2) in a square box and assoaciete them a label classifying points inside/outside a triangle. 
+    This function generates the input data-set of N 2-dimensional points (x1,x2) in a square box and assoaciete them a label classifying points inside/outside a triangle.
     It defines the fraction of data devoted to the training of the network and eventually the augemtations of such data with noise normally distributed.
     Args:
-        N (int): 
+        N (int):
             Number of generated points
-        box (int, optional): 
+        box (int, optional):
             Size of the square box of data-points. Defaults to 1.
-        train_frac (float, optional): 
+        train_frac (float, optional):
             Fraction of input data devoted to the network training. Defaults to 1.0.
-        augment_frac (float, optional): 
+        augment_frac (float, optional):
             Fraction of training data distorted with Gaussian noise without changing labels. Defaults to 0.0.
-        augment_std (float, optional): 
+        augment_std (float, optional):
             std deviation of the Gaussian noise used for augmentation. Defaults to 0.1.
     Returns:
-        ndarray, ndarray : 
+        ndarray, ndarray :
             2D input data points and the associated 1D labels
     """
     x = (np.random.random((N, 2)) - 0.5) * box
@@ -74,6 +75,10 @@ def train(params):
 # %%
 # region [1A]: INPUT SIZE N VS TRAINING FRACTION
 
+vals = {
+    "N": 1000 * 2 ** np.arange(5),
+    "train_frac": [0.6, 0.7, 0.8, 0.9],
+}
 params = [
     {
         "samples": 1,
@@ -102,8 +107,7 @@ params = [
         },
         "fit": {"epochs": 500, "batch_size": 50, "verbose": 0},
     }
-    for N in 1000 * 2 ** np.arange(5)
-    for train_frac in [0.6, 0.7, 0.8, 0.9]
+    for N, train_frac in product(*vals.values())
 ]
 
 for p in params:
@@ -179,8 +183,8 @@ params = [
         },
         "fit": {"epochs": 500, "batch_size": 50, "verbose": 0},
     }
-    for opt_algorithm in ['sgd', 'adamax', 'rmsprop', 'adam']
-    for act_function in ['sigmoid', 'relu', 'tanh', 'softsign', 'elu']
+    for opt_algorithm in ["sgd", "adamax", "rmsprop", "adam"]
+    for act_function in ["sigmoid", "relu", "tanh", "softsign", "elu"]
 ]
 
 for p in params:
@@ -202,16 +206,16 @@ params = [
         "model": {
             "name": "model",
             "layers": [
-                tf.keras.layers.Dense(2, activation='elu'),
-                tf.keras.layers.Dense(M, activation='elu'),
-                tf.keras.layers.Dense(M, activation='elu'),
+                tf.keras.layers.Dense(2, activation="elu"),
+                tf.keras.layers.Dense(M, activation="elu"),
+                tf.keras.layers.Dense(M, activation="elu"),
                 tf.keras.layers.Dropout(0.2),
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ],
         },
         "compile": {
             "loss": "binary_crossentropy",
-            "optimizer": 'adam',
+            "optimizer": "adam",
             "metrics": ["accuracy"],
             "steps_per_execution": 4,
         },
@@ -227,6 +231,17 @@ for p in params:
 # endregion
 # %%
 # region [2C]: # HIDDEN LAYERS VS DROPOUT PERCENTAGE
+
+
+def gen_arch(neurons, p_drop):
+    layers = [tf.keras.layers.Dense(2, activation="elu")]
+    for n in neurons:
+        layers.append(tf.keras.layers.Dense(n, activation="elu"))
+        layers.append(tf.keras.layers.Dropout(p_drop))
+    layers.append(tf.keras.layers.Dense(1, activation="sigmoid"))
+    return layers
+
+
 params = [
     {
         "samples": 1,
@@ -238,54 +253,23 @@ params = [
         },
         "model": {
             "name": "model",
-            "layers": chosen_architecture,
+            "layers": gen_arch(neurons, p_drop),
         },
         "compile": {
             "loss": "binary_crossentropy",
-            "optimizer": 'adam',
+            "optimizer": "adam",
             "metrics": ["accuracy"],
             "steps_per_execution": 4,
         },
         "fit": {"epochs": 500, "batch_size": 50, "verbose": 0},
     }
-    for p_drop in [0., 0.1, 0.2, 0.3, 0.4, 0.5]
-    for chosen_architecture in [
-        [
-            tf.keras.layers.Dense(2, activation='elu'),
-            tf.keras.layers.Dense(125, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(1, activation="sigmoid")
-        ],
-        [
-            tf.keras.layers.Dense(2, activation='elu'),
-            tf.keras.layers.Dense(20, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(20, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(1, activation="sigmoid")
-        ],
-        [
-            tf.keras.layers.Dense(2, activation='elu'),
-            tf.keras.layers.Dense(16, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(16, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(10, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(1, activation="sigmoid")
-        ],
-        [
-            tf.keras.layers.Dense(2, activation='elu'),
-            tf.keras.layers.Dense(12, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(12, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(12, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(10, activation='elu'),
-            tf.keras.layers.Dropout(p_drop),
-            tf.keras.layers.Dense(1, activation="sigmoid")
-        ]
+    for p_drop in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+    for neurons in [
+        [125],
+        [20, 20],
+        [16, 16, 10],
+        [11, 12, 12, 12],
+        [11, 10, 10, 10, 10],
     ]
 ]
 
