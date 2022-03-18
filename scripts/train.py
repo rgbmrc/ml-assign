@@ -63,5 +63,7 @@ with run_sim() as sim:
 
         # dump
         sim.dump()
+        del sim[f"weights_{s}"]
+        del sim[f"history_{s}"]
 
     sim[f"model"] = mod
