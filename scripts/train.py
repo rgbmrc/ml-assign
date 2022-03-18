@@ -55,7 +55,7 @@ with run_sim() as sim:
         # compile
         compile_pars = sim.par["compile"].copy()
         compile_pars["optimizer"] = tf.keras.optimizers.get(compile_pars["optimizer"])
-        mod.compile(**sim.par["compile"])
+        mod.compile(**compile_pars)
 
         # fit
         fit = mod.fit(*train, validation_data=valid, **sim.par["fit"])
