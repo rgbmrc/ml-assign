@@ -1,0 +1,117 @@
+# from simsio import gen_configs
+# import numpy as np
+# params = {
+#     "N": 1000 * 2 ** np.arange(1, 5),
+#     "M": np.arange(5, 26, 5),
+# }
+# gen_configs("template", params, "II/2B")
+===:
+  template: |
+    n$enum:
+      <<<: common
+      input: {N: $N}
+      model: {vars: {M: $M}}
+  common:
+    samples: 100
+    input:
+      train_frac: 0.8
+      rescale: 50
+      offset: 0
+    model:
+      layers:
+      - tf.keras.layers.Dense(2, activation="elu")
+      - tf.keras.layers.Dense(M, activation="elu")
+      - tf.keras.layers.Dense(M, activation="elu")
+      - tf.keras.layers.Dropout(0.2)
+      - tf.keras.layers.Dense(1, activation="sigmoid")
+    compile:
+      optimizer: adam
+      loss: binary_crossentropy
+      metrics: [accuracy]
+      steps_per_execution: 4
+    fit:
+      epochs: 500
+      batch_size: 50
+      verbose: 0
+n0:
+  <<<: common
+  input: {N: 2000}
+  model: {vars: {M: 5}}
+n1:
+  <<<: common
+  input: {N: 2000}
+  model: {vars: {M: 10}}
+n2:
+  <<<: common
+  input: {N: 2000}
+  model: {vars: {M: 15}}
+n3:
+  <<<: common
+  input: {N: 2000}
+  model: {vars: {M: 20}}
+n4:
+  <<<: common
+  input: {N: 2000}
+  model: {vars: {M: 25}}
+n5:
+  <<<: common
+  input: {N: 4000}
+  model: {vars: {M: 5}}
+n6:
+  <<<: common
+  input: {N: 4000}
+  model: {vars: {M: 10}}
+n7:
+  <<<: common
+  input: {N: 4000}
+  model: {vars: {M: 15}}
+n8:
+  <<<: common
+  input: {N: 4000}
+  model: {vars: {M: 20}}
+n9:
+  <<<: common
+  input: {N: 4000}
+  model: {vars: {M: 25}}
+n10:
+  <<<: common
+  input: {N: 8000}
+  model: {vars: {M: 5}}
+n11:
+  <<<: common
+  input: {N: 8000}
+  model: {vars: {M: 10}}
+n12:
+  <<<: common
+  input: {N: 8000}
+  model: {vars: {M: 15}}
+n13:
+  <<<: common
+  input: {N: 8000}
+  model: {vars: {M: 20}}
+n14:
+  <<<: common
+  input: {N: 8000}
+  model: {vars: {M: 25}}
+n15:
+  <<<: common
+  input: {N: 16000}
+  model: {vars: {M: 5}}
+n16:
+  <<<: common
+  input: {N: 16000}
+  model: {vars: {M: 10}}
+n17:
+  <<<: common
+  input: {N: 16000}
+  model: {vars: {M: 15}}
+n18:
+  <<<: common
+  input: {N: 16000}
+  model: {vars: {M: 20}}
+n19:
+  <<<: common
+  input: {N: 16000}
+  model: {vars: {M: 25}}
+
+

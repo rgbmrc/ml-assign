@@ -7,7 +7,7 @@ par = out/$uid/par, w, simsio.serializers.YAMLSerializer
 directory = configs
 header_tag = ===
 header_ref = <<<
-lock_attempts = 100
+lock_attempts = 200
 
 [versioning]
 git_revision = git rev-parse HEAD

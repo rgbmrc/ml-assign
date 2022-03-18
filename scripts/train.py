@@ -6,19 +6,27 @@ from simsio.serializers import NPZSerializer
 from simsio.extensions.ext_keras import KerasModelSerializer, KerasWeightSerializer
 
 
-def generate(N, box=1, train_frac=1.0, augment_frac=0.0, augment_std=0.1):
+def generate(
+    N, train_frac=1.0, rescale=None, offset=None, augment_frac=0.0, augment_std=0.0
+):
     """
     Data generation.
     """
-    x = (np.random.random((N, 2)) - 0.5) * box
+    x = np.random.random((N, 2)) * 100 - 50
     y = (x[..., 0] > -20) & (x[..., 1] > -40) & ((x[..., 0] + x[..., 1]) < 40)
-    x = (x - x.mean()) / x.std()
+
+    if rescale is None:
+        rescale = x.mean()
+    if offset is None:
+        offset = x.std()
+    x = (x - offset) / rescale
+
     N_train = int(N * train_frac)
     N_augment = int(N_train * augment_frac)
     x_train = np.pad(x[:N_train], ((0, N_augment), (0, 0)), mode="wrap")
     y_train = np.pad(y[:N_train], ((0, N_augment)), mode="wrap")
-    valid = [a[N_train:] for a in (x, y)]
     x_train[:N_augment] += np.random.normal(0.0, augment_std, size=(N_augment, 2))
+    valid = [a[N_train:] for a in (x, y)]
     return (x_train, y_train), valid
 
 
@@ -37,10 +45,10 @@ with run_sim() as sim:
 
         # model
         model_pars = sim.par["model"].copy()
-        M = model_pars.pop("M", 20)
-        dropout = model_pars.pop("dropout", 0.2)
-        activation = model_pars.pop("activation", None)
-        model_pars["layers"] = [eval(l) for l in sim.par["model"]["layers"]]
+        model_vars = model_pars.pop("vars", {})
+        model_pars["layers"] = [
+            eval(l, globals(), model_vars) for l in model_pars["layers"]
+        ]
         mod = tf.keras.models.Sequential(**model_pars)
         sim[f"weights_{s}"] = mod
 
@@ -50,11 +58,7 @@ with run_sim() as sim:
         mod.compile(**sim.par["compile"])
 
         # fit
-        fit = mod.fit(
-            *train,
-            validation_data=valid,
-            **sim.par["fit"],
-        )
+        fit = mod.fit(*train, validation_data=valid, **sim.par["fit"])
         sim[f"history_{s}"] = fit.history
 
         # dump
