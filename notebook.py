@@ -6,6 +6,11 @@ from itertools import product
 
 import numpy as np
 import tensorflow as tf
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+
+samples = 1
 
 
 def generate(
@@ -81,6 +86,25 @@ def train(params):
     return results
 
 
+def gridplot(vals, data):
+    """
+    Plot accuracy gridsearch.
+
+    Before plotting averages over realizations.
+    """
+    fig, ax = plt.subplots()
+    data = np.asarray(data)[..., -1].mean(-1)
+    data = data.reshape([len(v) for v in vals.values()])
+    sm = ax.imshow(data, origin="lower", cmap="magma")
+    for axis, (p, vs) in zip((ax.yaxis, ax.xaxis), vals.items()):
+        axis.set_major_locator(mpl.ticker.FixedLocator(np.arange(len(vs))))
+        axis.set_major_formatter(mpl.ticker.FixedFormatter(vs))
+        axis.set_label_text(p)
+    cbar = fig.colorbar(sm)
+    cbar.set_label("accuracy")
+    return fig, ax
+
+
 # **********************************************************************
 # endregion
 
@@ -96,14 +120,12 @@ vals = {
 # Dictionary of DNN configuration setups
 params = [
     {
-        "samples": 2,
+        "samples": samples,
         "input": {
             "N": N,
             "rescale": 50,
             "offset": 0,
             "train_frac": train_frac,
-            "augment_frac": 0.0,
-            "augment_std": 0.0,
         },
         "model": {
             "name": "model",
@@ -125,16 +147,8 @@ params = [
     }
     for N, train_frac in product(*vals.values())
 ]
+fig, ax = gridplot(vals, [train(p)["val_accuracy"] for p in params])
 
-results = []
-for p in params:
-    res = train(p)
-    results.append(res["val_accuracy"])
-
-
-data = np.asarray(results)
-data = data[:, :, -1]
-avg_data = np.mean(data, axis=1).reshape(4, 5)
 # **********************************************************************
 # endregion
 # %%
@@ -149,14 +163,14 @@ vals = {
 # Dictionary of DNN configuration setups
 params = [
     {
-        "samples": 1,
+        "samples": samples,
         "input": {
             "N": 4000,
             "rescale": 50,
             "offset": 0,
             "train_frac": train_frac,
             "augment_frac": augment_frac,
-            "augment_std": 0.1,
+            "augment_std": 0.05773502691896,
         },
         "model": {
             "name": "model",
@@ -203,13 +217,12 @@ vals = {
 # Dictionary of DNN configuration setups
 params = [
     {
-        "samples": 1,
+        "samples": samples,
         "input": {
             "N": 8000,
             "rescale": 50,
             "offset": 0,
             "train_frac": 0.8,
-            "augment_frac": 0.0,
         },
         "model": {
             "name": "model",
@@ -256,13 +269,12 @@ vals = {
 # Dictionary of DNN configuration setups
 params = [
     {
-        "samples": 1,
+        "samples": samples,
         "input": {
             "N": N,
             "rescale": 50,
             "offset": 0,
             "train_frac": 0.8,
-            "augment_frac": 0.0,
         },
         "model": {
             "name": "model",
@@ -332,13 +344,12 @@ vals = {
 # Dictionary of DNN configuration setups
 params = [
     {
-        "samples": 1,
+        "samples": samples,
         "input": {
             "N": 4000,
             "rescale": 50,
             "offset": 0,
             "train_frac": 0.8,
-            "augment_frac": 0.0,
         },
         "model": {
             "name": "model",
