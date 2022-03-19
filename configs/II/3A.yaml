@@ -1,8 +1,8 @@
 # from simsio import gen_configs
 # import numpy as np
 # params = {
-#     "rescale": np.arange(2, 7) * 10,
-#     "lr": np.logspace(-4, -1, 4),
+#     "rescale": np.logspace(-1, 2, 4),
+#     "lr": np.logspace(-3.5, -1.5, 5),
 # }
 # gen_configs("template", params, "II/3A")
 ===:
@@ -36,81 +36,83 @@
       verbose: 0
 n0:
   <<<: common
-  input: {rescale: 20}
-  compile: {optimizer: {config: {learning_rate: 0.0001}}}
+  input: {rescale: 0.1}
+  compile: {optimizer: {config: {learning_rate: 0.00031622776601683794}}}
 n1:
   <<<: common
-  input: {rescale: 20}
+  input: {rescale: 0.1}
   compile: {optimizer: {config: {learning_rate: 0.001}}}
 n2:
   <<<: common
-  input: {rescale: 20}
-  compile: {optimizer: {config: {learning_rate: 0.01}}}
+  input: {rescale: 0.1}
+  compile: {optimizer: {config: {learning_rate: 0.0031622776601683794}}}
 n3:
   <<<: common
-  input: {rescale: 20}
-  compile: {optimizer: {config: {learning_rate: 0.1}}}
+  input: {rescale: 0.1}
+  compile: {optimizer: {config: {learning_rate: 0.01}}}
 n4:
   <<<: common
-  input: {rescale: 30}
-  compile: {optimizer: {config: {learning_rate: 0.0001}}}
+  input: {rescale: 0.1}
+  compile: {optimizer: {config: {learning_rate: 0.03162277660168379}}}
 n5:
   <<<: common
-  input: {rescale: 30}
-  compile: {optimizer: {config: {learning_rate: 0.001}}}
+  input: {rescale: 1.0}
+  compile: {optimizer: {config: {learning_rate: 0.00031622776601683794}}}
 n6:
   <<<: common
-  input: {rescale: 30}
-  compile: {optimizer: {config: {learning_rate: 0.01}}}
+  input: {rescale: 1.0}
+  compile: {optimizer: {config: {learning_rate: 0.001}}}
 n7:
   <<<: common
-  input: {rescale: 30}
-  compile: {optimizer: {config: {learning_rate: 0.1}}}
+  input: {rescale: 1.0}
+  compile: {optimizer: {config: {learning_rate: 0.0031622776601683794}}}
 n8:
   <<<: common
-  input: {rescale: 40}
-  compile: {optimizer: {config: {learning_rate: 0.0001}}}
+  input: {rescale: 1.0}
+  compile: {optimizer: {config: {learning_rate: 0.01}}}
 n9:
   <<<: common
-  input: {rescale: 40}
-  compile: {optimizer: {config: {learning_rate: 0.001}}}
+  input: {rescale: 1.0}
+  compile: {optimizer: {config: {learning_rate: 0.03162277660168379}}}
 n10:
   <<<: common
-  input: {rescale: 40}
-  compile: {optimizer: {config: {learning_rate: 0.01}}}
+  input: {rescale: 10.0}
+  compile: {optimizer: {config: {learning_rate: 0.00031622776601683794}}}
 n11:
   <<<: common
-  input: {rescale: 40}
-  compile: {optimizer: {config: {learning_rate: 0.1}}}
+  input: {rescale: 10.0}
+  compile: {optimizer: {config: {learning_rate: 0.001}}}
 n12:
   <<<: common
-  input: {rescale: 50}
-  compile: {optimizer: {config: {learning_rate: 0.0001}}}
+  input: {rescale: 10.0}
+  compile: {optimizer: {config: {learning_rate: 0.0031622776601683794}}}
 n13:
   <<<: common
-  input: {rescale: 50}
-  compile: {optimizer: {config: {learning_rate: 0.001}}}
+  input: {rescale: 10.0}
+  compile: {optimizer: {config: {learning_rate: 0.01}}}
 n14:
   <<<: common
-  input: {rescale: 50}
-  compile: {optimizer: {config: {learning_rate: 0.01}}}
+  input: {rescale: 10.0}
+  compile: {optimizer: {config: {learning_rate: 0.03162277660168379}}}
 n15:
   <<<: common
-  input: {rescale: 50}
-  compile: {optimizer: {config: {learning_rate: 0.1}}}
+  input: {rescale: 100.0}
+  compile: {optimizer: {config: {learning_rate: 0.00031622776601683794}}}
 n16:
   <<<: common
-  input: {rescale: 60}
-  compile: {optimizer: {config: {learning_rate: 0.0001}}}
+  input: {rescale: 100.0}
+  compile: {optimizer: {config: {learning_rate: 0.001}}}
 n17:
   <<<: common
-  input: {rescale: 60}
-  compile: {optimizer: {config: {learning_rate: 0.001}}}
+  input: {rescale: 100.0}
+  compile: {optimizer: {config: {learning_rate: 0.0031622776601683794}}}
 n18:
   <<<: common
-  input: {rescale: 60}
+  input: {rescale: 100.0}
   compile: {optimizer: {config: {learning_rate: 0.01}}}
 n19:
   <<<: common
-  input: {rescale: 60}
-  compile: {optimizer: {config: {learning_rate: 0.1}}}
+  input: {rescale: 100.0}
+  compile: {optimizer: {config: {learning_rate: 0.03162277660168379}}}
+
+
