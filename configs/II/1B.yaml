@@ -15,7 +15,8 @@
     input:
       N: 4000
       rescale: 50
-      augment_std: 0.1
+      offset: 0
+      augment_std: 0.05
     model:
       layers:
       - tf.keras.layers.Dense(2, activation="relu")
