@@ -14,7 +14,7 @@ samples = 1
 
 
 def generate(
-    N, train_frac=1.0, rescale=None, offset=None, augment_frac=0.0, augment_std=0.0
+    N, train_frac=1.0, rescale=1.0, offset=0.0, augment_frac=0.0, augment_std=0.0
 ):
     """
     This function generates the input data-set of N 2-dimensional points (x1,x2) in a square box and assoaciate them to a label classifying points inside/outside a triangle.
@@ -25,9 +25,9 @@ def generate(
         train_frac (float, optional):
             Fraction of input data devoted to the network training. Defaults to 1.0.
         rescale (float, optional):
-            Scaling factor applied to input data (x1,x2). Defaults to None.
+            Scaling factor applied to input data (x1,x2). Defaults to 1..
         offset (float, optional):
-            Offset applied to input data (x1,x2) after rescaling. Defaults to None.
+            Offset applied to input data (x1,x2) after rescaling. Defaults to 0..
         augment_frac (float, optional):
             Fraction of training data distorted with Gaussian noise without changing labels. Defaults to 0.0.
         augment_std (float, optional):
@@ -40,10 +40,6 @@ def generate(
     x = np.random.random((N, 2)) * 100 - 50
     y = (x[..., 0] > -20) & (x[..., 1] > -40) & ((x[..., 0] + x[..., 1]) < 40)
 
-    if rescale is None:
-        rescale = x.mean()
-    if offset is None:
-        offset = x.std()
     x = (x - offset) / rescale
 
     N_train = int(N * train_frac)
