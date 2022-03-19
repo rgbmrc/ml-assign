@@ -16,9 +16,9 @@ def generate(
     y = (x[..., 0] > -20) & (x[..., 1] > -40) & ((x[..., 0] + x[..., 1]) < 40)
 
     if rescale is None:
-        rescale = x.mean()
+        rescale = x.std()
     if offset is None:
-        offset = x.std()
+        offset = x.mean()
     x = (x - offset) / rescale
 
     N_train = int(N * train_frac)
@@ -30,40 +30,47 @@ def generate(
     return (x_train, y_train), valid
 
 
-with run_sim() as sim:
-    sim.link("model", serializer=KerasModelSerializer())
-    samples = sim.par["samples"]
+def main():
+    with run_sim() as sim:
+        sim.link("model", serializer=KerasModelSerializer())
+        samples = sim.par["samples"]
 
-    for s in range(samples):
+        for s in range(samples):
 
-        # IO handles
-        sim.link(f"weights_{s}", serializer=KerasWeightSerializer())
-        sim.link(f"history_{s}", serializer=NPZSerializer())
+            # IO handles
+            sim.link(f"weights_{s}", serializer=KerasWeightSerializer())
+            sim.link(f"history_{s}", serializer=NPZSerializer())
 
-        # input
-        train, valid = generate(**sim.par["input"])
+            # input
+            train, valid = generate(**sim.par["input"])
 
-        # model
-        model_pars = sim.par["model"].copy()
-        model_vars = model_pars.pop("vars", {})
-        model_pars["layers"] = [
-            eval(l, globals(), model_vars) for l in model_pars["layers"]
-        ]
-        mod = tf.keras.models.Sequential(**model_pars)
-        sim[f"weights_{s}"] = mod
+            # model
+            model_pars = sim.par["model"].copy()
+            model_vars = model_pars.pop("vars", {})
+            model_pars["layers"] = [
+                eval(l, globals(), model_vars) for l in model_pars["layers"]
+            ]
+            mod = tf.keras.models.Sequential(**model_pars)
+            sim[f"weights_{s}"] = mod
 
-        # compile
-        compile_pars = sim.par["compile"].copy()
-        compile_pars["optimizer"] = tf.keras.optimizers.get(compile_pars["optimizer"])
-        mod.compile(**compile_pars)
+            # compile
+            compile_pars = sim.par["compile"].copy()
+            compile_pars["optimizer"] = tf.keras.optimizers.get(
+                compile_pars["optimizer"]
+            )
+            mod.compile(**compile_pars)
 
-        # fit
-        fit = mod.fit(*train, validation_data=valid, **sim.par["fit"])
-        sim[f"history_{s}"] = fit.history
+            # fit
+            fit = mod.fit(*train, validation_data=valid, **sim.par["fit"])
+            sim[f"history_{s}"] = fit.history
 
-        # dump
-        sim.dump()
-        del sim[f"weights_{s}"]
-        del sim[f"history_{s}"]
+            # dump
+            sim.dump()
+            del sim[f"weights_{s}"]
+            del sim[f"history_{s}"]
 
-    sim[f"model"] = mod
+        sim[f"model"] = mod
+
+
+if __name__ == "__main__":
+    main()
