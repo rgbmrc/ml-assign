@@ -8,17 +8,16 @@ dependencies:
   - jupyter
   - hickle
   - keras
-  - libblas[build=*mkl]
   - matplotlib>=3.5
   - nbconvert
   - numpy>=1.21
   - pip
-  - pre-commit
   - python=3.9
   - scikit-learn
   - scipy>=1.7
   - setuptools>=42
   - tensorflow
+  - yq
   - pip:
     - -e simsio[keras]
     - -e mplotter[pdf]

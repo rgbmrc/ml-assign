@@ -11,7 +11,7 @@ import mplotter as plotter
 from matplotlib.backend_bases import register_backend
 
 register_backend("pdf", "matplotlib.backends.backend_pgf")
-plotter.use_style(["mplotter/styles/rgbmrc.mplstyle", "review/report.mplstyle"])
+plotter.use_style(["mplotter/styles/rgbmrc.mplstyle", "report.mplstyle"])
 
 labels = {
     "input/N": "$N$",
@@ -128,7 +128,7 @@ def gridplot(dat, vals):
 
 # %%
 # region [1A]
-ugrid, vals, dat = collect("II/1A", ["input/N", "input/train_frac"])
+ugrid, vals, dat = collect("1A", ["input/N", "input/train_frac"])
 
 # %% plots
 fig, imgrid = gridplot(dat, vals)
@@ -138,8 +138,8 @@ plotter.save_fig(fig)
 
 # %%
 # region [1B]
-ugrid, vals, dat = collect("II/1B", ["input/augment_frac", "input/train_frac"])
-_ugrid, _vals = uids_grid(SimsQuery("II/1A").uids, ["input/N", "input/train_frac"])
+ugrid, vals, dat = collect("1B", ["input/augment_frac", "input/train_frac"])
+_ugrid, _vals = uids_grid(SimsQuery("1A").uids, ["input/N", "input/train_frac"])
 _dat = np.vectorize(extract_averages)(_ugrid[-2], "val_accuracy")
 dat = [np.vstack([d, _d]) for (d, _d) in zip(dat, _dat)]
 vals["input/augment_frac"] = [f"${l}$" for l in ("0", "1/3", "2/3", "1", "(\star)")]
@@ -153,7 +153,7 @@ plotter.save_fig(fig)
 
 # %%
 # region [2A]
-ugrid, vals, dat = collect("II/2A", ["compile/optimizer", "model/vars/activation"])
+ugrid, vals, dat = collect("2A", ["compile/optimizer", "model/vars/activation"])
 
 exp, std, cpu = dat
 i, j = np.unravel_index(exp.argmax(), ugrid.shape)
@@ -175,7 +175,7 @@ plotter.save_fig(fig)
 
 # %%
 # region [2B]
-ugrid, vals, dat = collect("II/2B", ["input/N", "model/vars/M"])
+ugrid, vals, dat = collect("2B", ["input/N", "model/vars/M"])
 
 # %% plots
 fig, imgrid = gridplot(dat[:2], vals)
@@ -187,7 +187,7 @@ plotter.save_fig(fig)
 # %%
 # region [2C]
 layers = lambda p: (len(p["model"]["layers"]) - 2) // 2
-ugrid, vals, dat = collect("II/2C", ["model/vars/dropout", layers])
+ugrid, vals, dat = collect("2C", ["model/vars/dropout", layers])
 vals["model/layers"] = vals.pop(layers)
 
 # %% plots
@@ -199,7 +199,7 @@ plotter.save_fig(fig)
 # %%
 # region [3A]
 ugrid, vals, dat = collect(
-    "II/3A", ["input/rescale", "compile/optimizer/config/learning_rate"]
+    "3A", ["input/rescale", "compile/optimizer/config/learning_rate"]
 )
 
 # %% plots
@@ -215,7 +215,7 @@ plotter.save_fig(fig)
 # %%
 # region [GLOBAL]
 
-match = SimsQuery("II/*")
+match = SimsQuery("*")
 uids = list(match.uids)
 
 
