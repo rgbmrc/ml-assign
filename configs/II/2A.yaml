@@ -43,85 +43,125 @@
       epochs: 500
       batch_size: 50
       verbose: 0
-n0:
+d1fe909ca68b11ecbdfcfa163ea6f025:
   <<<: common
   compile: {optimizer: adam}
   model: {vars: {activation: elu}}
-n1:
+1097a106a68011ecb0edfa163e209104:
   <<<: common
   compile: {optimizer: adamax}
   model: {vars: {activation: elu}}
-n2:
+b05e99aaa68b11ecbe72fa163ea6f025:
   <<<: common
   compile: {optimizer: rmsprop}
   model: {vars: {activation: elu}}
-n3:
+b4db32a4a68b11ecb056fa163ea6f025:
   <<<: common
   compile: {optimizer: sgd}
   model: {vars: {activation: elu}}
-n4:
+155d0ee2a68011eca3a3fa163e66c7df:
   <<<: common
   compile: {optimizer: adam}
   model: {vars: {activation: relu}}
-n5:
+154dbecea68011eca0d2fa163e66c7df:
   <<<: common
   compile: {optimizer: adamax}
   model: {vars: {activation: relu}}
-n6:
+b05dcffca68b11ecafddfa163ea6f025:
   <<<: common
   compile: {optimizer: rmsprop}
   model: {vars: {activation: relu}}
-n7:
+1a156d80a68011ec9a8afa163e66c7df:
   <<<: common
   compile: {optimizer: sgd}
   model: {vars: {activation: relu}}
-n8:
+10289feaa68011ecad35fa163e209104:
   <<<: common
   compile: {optimizer: adam}
   model: {vars: {activation: sigmoid}}
-n9:
+1542758ca68011ec9f62fa163e66c7df:
   <<<: common
   compile: {optimizer: adamax}
   model: {vars: {activation: sigmoid}}
-n10:
+10a52a38a68011ecb5dbfa163e209104:
   <<<: common
   compile: {optimizer: rmsprop}
   model: {vars: {activation: sigmoid}}
-n11:
+2f0b399aa68011ecbda5fa163e66c7df:
   <<<: common
   compile: {optimizer: sgd}
   model: {vars: {activation: sigmoid}}
-n12:
+1074bda8a68011ec97aefa163e209104:
   <<<: common
   compile: {optimizer: adam}
   model: {vars: {activation: softsign}}
-n13:
+104b25d8a68011ec836dfa163e209104:
   <<<: common
   compile: {optimizer: adamax}
   model: {vars: {activation: softsign}}
-n14:
+109f0de2a68011ec86a4fa163e209104:
   <<<: common
   compile: {optimizer: rmsprop}
   model: {vars: {activation: softsign}}
-n15:
+157b460aa68011ec8b34fa163e66c7df:
   <<<: common
   compile: {optimizer: sgd}
   model: {vars: {activation: softsign}}
-n16:
+15577298a68011ec8af6fa163e66c7df:
   <<<: common
   compile: {optimizer: adam}
   model: {vars: {activation: tanh}}
-n17:
+107a39f4a68011ec84e5fa163e209104:
   <<<: common
   compile: {optimizer: adamax}
   model: {vars: {activation: tanh}}
-n18:
+157fe066a68011ecb616fa163e66c7df:
   <<<: common
   compile: {optimizer: rmsprop}
   model: {vars: {activation: tanh}}
-n19:
+107ef7d2a68011ecb7fdfa163e209104:
   <<<: common
   compile: {optimizer: sgd}
   model: {vars: {activation: tanh}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

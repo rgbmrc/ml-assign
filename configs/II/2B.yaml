@@ -33,85 +33,125 @@
       epochs: 500
       batch_size: 50
       verbose: 0
-n0:
+9452530ea68c11ec802afa163e04b9dc:
   <<<: common
   input: {N: 2000}
   model: {vars: {M: 5}}
-n1:
+02465aeea6a211ecaf28fa163ee812fb:
   <<<: common
   input: {N: 2000}
   model: {vars: {M: 10}}
-n2:
+025162c2a6a211ec9f6bfa163ee812fb:
   <<<: common
   input: {N: 2000}
   model: {vars: {M: 15}}
-n3:
+030b5970a6a211ec97a6fa163ee812fb:
   <<<: common
   input: {N: 2000}
   model: {vars: {M: 20}}
-n4:
+941f1688a68c11ecacc2fa163e04b9dc:
   <<<: common
   input: {N: 2000}
   model: {vars: {M: 25}}
-n5:
+01de4260a6a211ec8856fa163ee812fb:
   <<<: common
   input: {N: 4000}
   model: {vars: {M: 5}}
-n6:
+941c6b9aa68c11ec9c93fa163e04b9dc:
   <<<: common
   input: {N: 4000}
   model: {vars: {M: 10}}
-n7:
+941c70a4a68c11eca03afa163e04b9dc:
   <<<: common
   input: {N: 4000}
   model: {vars: {M: 15}}
-n8:
+01de4058a6a211ecb92ffa163ee812fb:
   <<<: common
   input: {N: 4000}
   model: {vars: {M: 20}}
-n9:
+02516600a6a211ecb61cfa163ee812fb:
   <<<: common
   input: {N: 4000}
   model: {vars: {M: 25}}
-n10:
+941c0f7ea68c11eca734fa163e04b9dc:
   <<<: common
   input: {N: 8000}
   model: {vars: {M: 5}}
-n11:
+025a1796a6a211eca992fa163ee812fb:
   <<<: common
   input: {N: 8000}
   model: {vars: {M: 10}}
-n12:
+020b8978a6a211ecab2cfa163ee812fb:
   <<<: common
   input: {N: 8000}
   model: {vars: {M: 15}}
-n13:
+02414608a6a211ec83b7fa163ee812fb:
   <<<: common
   input: {N: 8000}
   model: {vars: {M: 20}}
-n14:
+030a73c0a6a211ecb5cafa163ee812fb:
   <<<: common
   input: {N: 8000}
   model: {vars: {M: 25}}
-n15:
+941c71d0a68c11ec8fcafa163e04b9dc:
   <<<: common
   input: {N: 16000}
   model: {vars: {M: 5}}
-n16:
+0215cf3ca6a211ecbeeafa163ee812fb:
   <<<: common
   input: {N: 16000}
   model: {vars: {M: 10}}
-n17:
+9450c0fca68c11ec9888fa163e04b9dc:
   <<<: common
   input: {N: 16000}
   model: {vars: {M: 15}}
-n18:
+025162c2a6a211ec876efa163ee812fb:
   <<<: common
   input: {N: 16000}
   model: {vars: {M: 20}}
-n19:
+940e3782a68c11ec9b16fa163e04b9dc:
   <<<: common
   input: {N: 16000}
   model: {vars: {M: 25}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

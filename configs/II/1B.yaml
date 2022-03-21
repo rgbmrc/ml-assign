@@ -33,53 +33,85 @@
       epochs: 500
       batch_size: 50
       verbose: 0
-n0:
+61849a4ca72011ec9867fa163efacce8:
   <<<: common
   input: {train_frac: 0.6, augment_frac: 0.0}
-n1:
+61846126a72011ecb4f4fa163efacce8:
   <<<: common
   input: {train_frac: 0.6, augment_frac: 0.3333333333333333}
-n2:
+6137f2d2a72011ecabe9fa163e595e79:
   <<<: common
   input: {train_frac: 0.6, augment_frac: 0.6666666666666666}
-n3:
+62250a04a72011eca3effa163e04b9dc:
   <<<: common
   input: {train_frac: 0.6, augment_frac: 1.0}
-n4:
+6225036aa72011ec975afa163e04b9dc:
   <<<: common
   input: {train_frac: 0.7, augment_frac: 0.0}
-n5:
+6b0cb374a72011ec8ed7fa163e209104:
   <<<: common
   input: {train_frac: 0.7, augment_frac: 0.3333333333333333}
-n6:
+66e760a0a72011ecb5cbfa163ea6f025:
   <<<: common
   input: {train_frac: 0.7, augment_frac: 0.6666666666666666}
-n7:
+67e123b0a72011ec96e3fa163e209104:
   <<<: common
   input: {train_frac: 0.7, augment_frac: 1.0}
-n8:
+6d785028a72011eca5e3fa163ea6f025:
   <<<: common
   input: {train_frac: 0.8, augment_frac: 0.0}
-n9:
+66e5ff44a72011ec9536fa163ea6f025:
   <<<: common
   input: {train_frac: 0.8, augment_frac: 0.3333333333333333}
-n10:
+62245d66a72011ec8c7cfa163e66c7df:
   <<<: common
   input: {train_frac: 0.8, augment_frac: 0.6666666666666666}
-n11:
+622124f2a72011ecbf84fa163e209104:
   <<<: common
   input: {train_frac: 0.8, augment_frac: 1.0}
-n12:
+6137f8cca72011ec813bfa163e595e79:
   <<<: common
   input: {train_frac: 0.9, augment_frac: 0.0}
-n13:
+62245ed8a72011ec9e97fa163e66c7df:
   <<<: common
   input: {train_frac: 0.9, augment_frac: 0.3333333333333333}
-n14:
+61382c8ea72011ec86f9fa163e595e79:
   <<<: common
   input: {train_frac: 0.9, augment_frac: 0.6666666666666666}
-n15:
+6a4ecfbca72011ecbf34fa163efacce8:
   <<<: common
   input: {train_frac: 0.9, augment_frac: 1.0}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
