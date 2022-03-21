@@ -34,26 +34,6 @@
       epochs: 500
       batch_size: 50
       verbose: 0
-# c19bfaf0a72111ec80dbfa163efacce8:
-#   <<<: common
-#   input: {rescale: 0.1}
-#   compile: {optimizer: {config: {learning_rate: 0.00031622776601683794}}}
-# 9d2df254a72111ec95b0fa163e595e79:
-#   <<<: common
-#   input: {rescale: 0.1}
-#   compile: {optimizer: {config: {learning_rate: 0.001}}}
-# 9d2e99fca72111ec9186fa163e595e79:
-#   <<<: common
-#   input: {rescale: 0.1}
-#   compile: {optimizer: {config: {learning_rate: 0.0031622776601683794}}}
-# 9d3d89b2a72111ecb052fa163e595e79:
-#   <<<: common
-#   input: {rescale: 0.1}
-#   compile: {optimizer: {config: {learning_rate: 0.01}}}
-# ac106af4a72111ecbffffa163e66c7df:
-#   <<<: common
-#   input: {rescale: 0.1}
-#   compile: {optimizer: {config: {learning_rate: 0.03162277660168379}}}
 9e2436d2a72111ec98dcfa163e66c7df:
   <<<: common
   input: {rescale: 1.0}
