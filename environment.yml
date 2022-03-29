@@ -5,18 +5,23 @@ channels:
 dependencies:
   - black
   - cxx-compiler
+  - dpath=2.0
   - jupyter
   - hickle
   - keras
   - matplotlib>=3.5
   - nbconvert
   - numpy>=1.21
+  - pandas
   - pip
   - python=3.9
   - scikit-learn
   - scipy>=1.7
+  - seaborn
   - setuptools>=42
   - tensorflow
+  - tsfresh
+  - xgboost
   - yq
   - pip:
     - -e simsio[keras]
