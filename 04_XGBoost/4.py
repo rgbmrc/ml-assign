@@ -285,3 +285,131 @@ plt.show()
 # - L > ~0.5 (feature 1),  signle out signals of class 2 (higher variance)
 
 # %%
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.rcParams["font.size"] = 14
+# IMPORT THE CLASSIFIERS we can use
+from xgboost import XGBClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from xgboost import plot_tree
+
+# %% [markdown]
+# # Generate 2D data:
+# Notice that here the features are just che (x1,x2) coordinates of 2D points in the grid. For this reason, we do not need to extract features as we have done for the time series via TSFRESH.
+
+# %%
+def generate_2D_data(N, S, train_frac, CASE, seed=None):
+    # Reproducibility
+    rng = np.random.default_rng(seed)
+    # Generate Random 2D Data
+    x = S * (2 * rng.normal(N, 2) - 1)
+    # Generate Y Labels
+    y = np.zeros(N)
+    for n in range(N):
+        if CASE == 1:
+            if x[n, 1] < -0.6 and x[n, 0] > -0.2:
+                y[n] = 1
+            if x[n, 1] > 0.4 and x[n, 0] < -0.8:
+                y[n] = 1
+            if x[n, 1] > 1.0 and x[n, 0] > 0.8:
+                y[n] = 1
+        elif CASE == 2:
+            if x[n, 1] < 0 and x[n, 0] > 0.5:
+                y[n] = 1
+            if x[n, 1] > 0 and np.sqrt((x[n, 0] + 0.3) ** 2 + x[n, 1] ** 2) < 1.5:
+                y[n] = 1
+        elif CASE == 3:
+            y[n] += 100.0 * (-x[n, 0] + np.cos(3.14 * x[n, 1]))
+        elif CASE == 4:
+            y[n] += -100.0 * (x[n, 0] + x[n, 1])
+        else:
+            ValueError("The value of CASE does not belong to [1,2,3,4]")
+
+    # Get Training and Validation sets
+    N_train = int(N * train_frac)
+    x_train, y_train = x[:N_train], y[:N_train]
+    x_val, y_val = x[N_train:], y[N_train:]
+
+    return x_train, y_train, x_val, y_val
+
+
+# %% [markdown]
+# ### Parameters
+
+# %%
+default_params = {
+    # 2D Data-generation (used only for XGBoost)
+    "generate_2D": {
+        "N": 2000,
+        "S": 2,
+        "CASE": [1, 2, 3, 4],
+    },
+    # Data-Preprocessing
+    "preprocess": {"train_frac": 0.8},
+    # XGBoost MODEL
+    "XGB": {
+        "classifier": {
+            "seed": 1,
+            "objective": ["binary:logistic"],  # ,'reg:squarederror'],
+            "eval_metric": ["logloss", "rmse"],
+            # Coupling constant of Regularizes (L1, and L2)
+            "reg_lambda": 0.001,
+            # Weights of the leaves in the Loss function: the larger gamma, the greater the cost of more leaves
+            "gamma": [0, 1, 2, 4, 10, 20, 40, 100, 200],
+            # Number of trees to be considered (sim time)
+            "n_estimators": 10,
+            "max_depth": 6,
+        },
+        "regressor": {
+            "seed": 1,
+            # Coupling constant of Regularizes (L1, and L2)
+            "reg_lambda": [100, 30, 20, 10, 5, 1, 0.5, 0.1],
+            # Weights of the leaves in the Loss function: the larger gamma, the greater the cost of more leaves
+            "gamma": [0, 1, 2, 4, 10, 20, 40, 100, 200],
+            # Number of trees to be considered
+            "n_estimators": [50, 100, 1000],
+            # Maximal depth of each single tree
+            "max_depth": 4,
+        },
+    },
+}
+
+# %%
+def XGB_train_model(default_params, generate_new_data=True):
+    # reproducibility
+    np.random.seed(12345)
+    # Generate Data
+    x_train, y_train, x_val, y_val = generate_2D_data(**default_params["generate_2D"])
+    # Define Model
+    model = XGBClassifier(**default_params["XGB"]["classifier"])
+    # Train Model
+    model.fit(x_train, y_train)
+    # Predict labels on validation set
+    y_pred_val = model.predict(x_val)
+    # Generate new data from the classification:
+    if generate_new_data:
+        dx = 0.02
+        S = default_params["generate_2D"]["S"]
+        x_seq = np.arange(-S, S + dx, dx)
+        nx = len(x_seq)
+        x_plot = np.zeros((nx * nx, 2))
+        q = 0
+        for i in range(nx):
+            for j in range(nx):
+                x_plot[q, :] = [x_seq[i], x_seq[j]]
+                q += 1
+        y_plot = model.predict(x_plot)
+
+        return y_pred_val, x_plot, y_plot
+    else:
+        return y_pred_val
+
+
+def Plot_Classified_2D_data(x, y, s=10, cmap="plasma"):
+    # Plot 2D Data according to the classification provided by the XGB Classifier
+    plt.figure(figsize=(6, 6))
+    plt.scatter(x[:, 0], x[:, 1], size=s, color=y, cmap=cmap)
+    plt.xlabel("f0")
+    plt.ylabel("f1")
