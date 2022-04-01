@@ -162,7 +162,6 @@ def CNN_build_model(x, y, reg_strength, N_filters):
         )
     )
     model.add(tf.keras.layers.AveragePooling1D(5))  # model.add(MaxPooling1D(3))
-    model.add(tf.keras.layers.Conv1D(filters=5, kernel_size=7, activation="relu"))
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(12, activation="relu"))
     model.add(tf.keras.layers.Dropout(0.2))
