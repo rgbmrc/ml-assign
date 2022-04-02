@@ -1,9 +1,9 @@
 # %% [markdown]
 # # LCPB 21-22 Exercise 4, XGBoost - Group 2205
 
-# %%
 # %% [markdown]
 # ### Imports, settings & helper functions
+
 import warnings
 
 import numpy as np
@@ -16,6 +16,7 @@ import seaborn as sns
 import tensorflow as tf  # (convolutinal) neural network
 import xgboost as xgb  # gradient boosted decision tree
 import tsfresh  # extract features
+from sklearn.model_selection import GridSearchCV
 
 warnings.simplefilter("ignore")
 plt.rcParams["font.size"] = 12
@@ -43,12 +44,10 @@ generate_params = {
     "pattern_width": 12,
 }
 train_params = {
-    # CNN
     "CNN": {
         "model": {"N_filters": 5, "reg_strength": {"l1": 0.0, "l2": 0.0}},
         "fit": {"epochs": 200, "batch_size": 250, "shuffle": True, "verbose": 0},
     },
-    # XGBoost
     "XGB": {
         "model": {
             "max_depth": 6,
@@ -142,7 +141,8 @@ def XGB_preprocess_1D_data(x, y):
 # %% [markdown]
 # #### Building the models
 #
-# The CNN is the one introduced in Excercise 3.
+# The CNN is the one introduced in Excercise 3, but without the second convolutional layer.
+# The lesser parameters should make the NN proportionate to the smaller datasets used here.
 
 
 def CNN_build_model(x, y, reg_strength, N_filters):
@@ -205,12 +205,13 @@ def XGB_compute_accuracy(model, *data):
 # %%capture --no-display
 # uncomment previous line to suppress output
 
-pop = 500
+pop = 5000
 N_list = [20, 50, 100, 150, 200, 250, 300, 400, 500]
 
 accuracy = np.ma.masked_all((len(train_params), len(N_list), pop // min(N_list)))
 for j, N in enumerate(N_list):
     for k in range(pop // N):
+        # generate the time series
         data = generate_1D_data(N=N, **generate_params)
         for i, (typ, params) in enumerate(train_params.items()):
             # retrieve the module level function "typ_fname"
@@ -284,132 +285,103 @@ plt.show()
 # - H < ~0.5 (features 2, 4),  signle out signals of class 0 (higher variance)
 # - L > ~0.5 (feature 1),  signle out signals of class 2 (higher variance)
 
-# %%
-import numpy as np
-import matplotlib.pyplot as plt
-
-plt.rcParams["font.size"] = 14
-# IMPORT THE CLASSIFIERS we can use
-from xgboost import XGBClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from xgboost import plot_tree
 
 # %% [markdown]
-# # Generate 2D data:
-# Notice that here the features are just che (x1,x2) coordinates of 2D points in the grid. For this reason, we do not need to extract features as we have done for the time series via TSFRESH.
-
-# %%
-def generate_2D_data(N, S, train_frac, CASE, seed=None):
-    # Reproducibility
-    rng = np.random.default_rng(seed)
-    # Generate Random 2D Data
-    x = S * (2 * rng.normal(N, 2) - 1)
-    # Generate Y Labels
-    y = np.zeros(N)
-    for n in range(N):
-        if CASE == 1:
-            if x[n, 1] < -0.6 and x[n, 0] > -0.2:
-                y[n] = 1
-            if x[n, 1] > 0.4 and x[n, 0] < -0.8:
-                y[n] = 1
-            if x[n, 1] > 1.0 and x[n, 0] > 0.8:
-                y[n] = 1
-        elif CASE == 2:
-            if x[n, 1] < 0 and x[n, 0] > 0.5:
-                y[n] = 1
-            if x[n, 1] > 0 and np.sqrt((x[n, 0] + 0.3) ** 2 + x[n, 1] ** 2) < 1.5:
-                y[n] = 1
-        elif CASE == 3:
-            y[n] += 100.0 * (-x[n, 0] + np.cos(3.14 * x[n, 1]))
-        elif CASE == 4:
-            y[n] += -100.0 * (x[n, 0] + x[n, 1])
-        else:
-            ValueError("The value of CASE does not belong to [1,2,3,4]")
-
-    # Get Training and Validation sets
-    N_train = int(N * train_frac)
-    x_train, y_train = x[:N_train], y[:N_train]
-    x_val, y_val = x[N_train:], y[N_train:]
-
-    return x_train, y_train, x_val, y_val
-
+# ## Part 2: two dimensional data
 
 # %% [markdown]
-# ### Parameters
-
+# ### Common parameters for the trainings
 # %%
-default_params = {
-    # 2D Data-generation (used only for XGBoost)
-    "generate_2D": {
-        "N": 2000,
-        "S": 2,
-        "CASE": [1, 2, 3, 4],
-    },
-    # Data-Preprocessing
-    "preprocess": {"train_frac": 0.8},
-    # XGBoost MODEL
-    "XGB": {
-        "classifier": {
-            "seed": 1,
-            "objective": ["binary:logistic"],  # ,'reg:squarederror'],
-            "eval_metric": ["logloss", "rmse"],
-            # Coupling constant of Regularizes (L1, and L2)
-            "reg_lambda": 0.001,
-            # Weights of the leaves in the Loss function: the larger gamma, the greater the cost of more leaves
-            "gamma": [0, 1, 2, 4, 10, 20, 40, 100, 200],
-            # Number of trees to be considered (sim time)
-            "n_estimators": 10,
-            "max_depth": 6,
-        },
-        "regressor": {
-            "seed": 1,
-            # Coupling constant of Regularizes (L1, and L2)
-            "reg_lambda": [100, 30, 20, 10, 5, 1, 0.5, 0.1],
-            # Weights of the leaves in the Loss function: the larger gamma, the greater the cost of more leaves
-            "gamma": [0, 1, 2, 4, 10, 20, 40, 100, 200],
-            # Number of trees to be considered
-            "n_estimators": [50, 100, 1000],
-            # Maximal depth of each single tree
-            "max_depth": 4,
-        },
-    },
+generate_params = {
+    "N": 2000,
+    "box": 4,
+    "seed": 1,
 }
+model_params = {
+    "seed": 1,
+    "objective": "binary:logistic",
+    "n_estimators": 50,  # number of trees
+    "max_depth": 8,  # depth of the trees
+    "reg_lambda": 0.001,  # L1/L2 parameter penalty
+    "gamma": 0.0,  # leaf penalty
+    "use_label_encoder": False,
+}
+# %%
+# %% [markdown]
+# ### Functions
+
+# %% [markdown]
+# #### Generating the data
+
+
+def generate_2D_data(N, box, seed=None):
+    rng = np.random.default_rng(seed)
+    x = box * (rng.random((N, 2)) - 0.5)
+    xT = x.T
+    y = np.logical_or.reduce(
+        [
+            np.logical_and(xT[0] > -0.2, xT[1] < -0.6),
+            np.logical_and(xT[0] < -0.8, xT[1] > +0.4),
+            np.logical_and(xT[0] > +0.8, xT[1] > +1.0),
+        ]
+    ).astype(int)
+    return x, y
+
+
+# %% [markdown]
+# #### Plotting the model performance
 
 # %%
-def XGB_train_model(default_params, generate_new_data=True):
-    # reproducibility
-    np.random.seed(12345)
-    # Generate Data
-    x_train, y_train, x_val, y_val = generate_2D_data(**default_params["generate_2D"])
-    # Define Model
-    model = XGBClassifier(**default_params["XGB"]["classifier"])
-    # Train Model
-    model.fit(x_train, y_train)
-    # Predict labels on validation set
-    y_pred_val = model.predict(x_val)
-    # Generate new data from the classification:
-    if generate_new_data:
-        dx = 0.02
-        S = default_params["generate_2D"]["S"]
-        x_seq = np.arange(-S, S + dx, dx)
-        nx = len(x_seq)
-        x_plot = np.zeros((nx * nx, 2))
-        q = 0
-        for i in range(nx):
-            for j in range(nx):
-                x_plot[q, :] = [x_seq[i], x_seq[j]]
-                q += 1
-        y_plot = model.predict(x_plot)
+def gridplot(grid_search):
+    df = pd.DataFrame(grid_search.cv_results_).pivot(
+        *[f"param_{k}" for k in reversed(grid_search.param_grid)],
+        values=["mean_test_score", "std_test_score"],
+    )  # what am i doing with my life?
+    xvalues = df.columns.levels[-1].values  # voodoo
+    for v, d in df.iterrows():
+        plt.errorbar(
+            df.columns.levels[-1].values,
+            1 - d["mean_test_score"],
+            d["std_test_score"],
+            marker="o",
+            label=v,
+        )
+    xlabel, series = grid_search.param_grid
+    plt.legend(title=series)
+    plt.xlabel(xlabel + ": " + ", ".join(xvalues.astype(str)))
 
-        return y_pred_val, x_plot, y_plot
-    else:
-        return y_pred_val
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.ylabel("$1-$ accuracy")
+    plt.grid(True, which="major", linestyle="-")
+    plt.grid(True, which="minor", linestyle=":")
 
 
-def Plot_Classified_2D_data(x, y, s=10, cmap="plasma"):
-    # Plot 2D Data according to the classification provided by the XGB Classifier
-    plt.figure(figsize=(6, 6))
-    plt.scatter(x[:, 0], x[:, 1], size=s, color=y, cmap=cmap)
-    plt.xlabel("f0")
-    plt.ylabel("f1")
+# %% [markdown]
+# ## Setup
+
+data = generate_2D_data(**generate_params)
+model = xgb.XGBClassifier(**model_params)
+
+# %% [markdown]
+# ## trees & leaves number
+
+grid_params = {
+    "n_estimators": np.logspace(0.5, 2, 6, dtype=int),  # number of trees
+    "max_depth": np.linspace(2, 5, 4, dtype=int),  # depth of the trees
+}
+grid_search = GridSearchCV(model, grid_params, n_jobs=-1, cv=10)  # black magic
+grid_search.fit(*data)
+gridplot(grid_search)
+
+
+# %% [markdown]
+# ## leaf & parameter penalties
+
+grid_params = {
+    "gamma": np.logspace(-1, 2, 4),  # leaf penalty
+    "reg_lambda": np.logspace(0, 2, 5),  # L1/L2 parameter penalty
+}
+grid_search = GridSearchCV(model, grid_params, n_jobs=-1, cv=10)  # black magic
+grid_search.fit(*data)
+gridplot(grid_search)
