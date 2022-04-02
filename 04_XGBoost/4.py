@@ -331,7 +331,7 @@ def generate_2D_data(N, box, seed=None):
 # %% [markdown]
 # #### Plotting the model performance
 
-# %%
+
 def gridplot(grid_search):
     df = pd.DataFrame(grid_search.cv_results_).pivot(
         *[f"param_{k}" for k in reversed(grid_search.param_grid)],
@@ -385,3 +385,8 @@ grid_params = {
 grid_search = GridSearchCV(model, grid_params, n_jobs=-1, cv=10)  # black magic
 grid_search.fit(*data)
 gridplot(grid_search)
+
+
+# %%HTML
+# <iframe width="560" height="315" frameborder=0 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?start=43&autoplay=1"></iframe>
+# %%
