@@ -1,9 +1,10 @@
 # %% [markdown]
-# # LCPB 21-22 Exercise 4, XGBoost - Group 2205
+#  # LCPB 21-22 Exercise 4, XGBoost - Group 2205
 
 # %% [markdown]
-# ### Imports, settings & helper functions
+#  ### Imports, settings & helper functions
 
+# %%
 import warnings
 
 import numpy as np
@@ -31,11 +32,12 @@ def split_arrays(fracs, *arrays):
 
 
 # %% [markdown]
-# ## Part 1: time series
+#  ## Part 1: time series
 
 # %% [markdown]
-# ### Common parameters for the trainings
+#  ### Common parameters for the trainings
 
+# %%
 generate_params = {
     "L": 60,
     "drift": 5.0,
@@ -61,17 +63,17 @@ train_params = {
 }
 
 # %% [markdown]
-# ### Functions (model specific ones are prefixed by CNN/XGB)
+#  ### Functions (model specific ones are prefixed by CNN/XGB)
 
 # %% [markdown]
-# #### Generating the data
+#  #### Generating the data
 #
-# Signal labels are assigned in the following way:
-# 0 = negative bump,
-# 1 = no bump,
-# 2 = positive bump.
+#  Signal labels are assigned in the following way:
+#  0 = negative bump,
+#  1 = no bump,
+#  2 = positive bump.
 
-
+# %%
 def generate_1D_data(N, L, drift, noise_amp, pattern_width, pattern_amp, seed=None):
     rng = np.random.default_rng(seed)  # reproducibility: fix random seed
 
@@ -85,16 +87,16 @@ def generate_1D_data(N, L, drift, noise_amp, pattern_width, pattern_amp, seed=No
 
 
 # %% [markdown]
-# #### Preprocessing the data
+#  #### Preprocessing the data
 #
-# In the CNN case, the preprocessing is the same of that in Excercise 3.
+#  In the CNN case, the preprocessing is the same of that in Excercise 3.
 #
-# For XGBoost, we
-# 1) Recast the input data as a `pandas` dataframe
-# 2) Extract some features via `tsfresh`
-# 3) For each feature, subtract the mean and rescale by the sdt. dev.
+#  For XGBoost, we
+#  1) Recast the input data as a `pandas` dataframe
+#  2) Extract some features via `tsfresh`
+#  3) For each feature, subtract the mean and rescale by the sdt. dev.
 
-
+# %%
 def CNN_preprocess_1D_data(x, y):
     N = y.size
     # remove mean of each signal & rescale by overall std
@@ -139,12 +141,12 @@ def XGB_preprocess_1D_data(x, y):
 
 
 # %% [markdown]
-# #### Building the models
+#  #### Building the models
 #
-# The CNN is the one introduced in Excercise 3, but without the second convolutional layer.
-# The lesser parameters should make the NN proportionate to the smaller datasets used here.
+#  The CNN is the one introduced in Excercise 3, but without the second convolutional layer.
+#  The lesser parameters should make the NN proportionate to the smaller datasets used here.
 
-
+# %%
 def CNN_build_model(x, y, reg_strength, N_filters):
     tf.random.set_seed(12345)
     reg = tf.keras.regularizers.l1_l2(**reg_strength)
@@ -181,9 +183,9 @@ def XGB_build_model(x, y, **params):
 
 
 # %% [markdown]
-# #### Assesing the models accuracy
+#  #### Assesing the models accuracy
 
-
+# %%
 def CNN_compute_accuracy(model, *data):
     return model.evaluate(*data)[model.metrics_names.index("accuracy")]
 
@@ -193,13 +195,13 @@ def XGB_compute_accuracy(model, *data):
 
 
 # %% [markdown]
-# ## Part 1a - CNN vs XGB for small datasets
+#  ## Part 1a - CNN vs XGB for small datasets
 #
-# The performances of XGB (gradient boosted decision tree) and CNN (convolutinal neural network)
-# are compared for small datasets.
+#  The performances of XGB (gradient boosted decision tree) and CNN (convolutinal neural network)
+#  are compared for small datasets.
 #
-# For each dataset size `N`, we repeat the training multiple times in order to collect some statistics.
-# The overall number of samples (population size, `pop`) is fixed.
+#  For each dataset size `N`, we repeat the training multiple times in order to collect some statistics.
+#  The overall number of samples (population size, `pop`) is fixed.
 
 # %%
 # %%capture --no-display
@@ -237,11 +239,11 @@ plt.legend(loc="lower right")
 plt.show()
 
 # %% [markdown]
-# For small datasets, XGB performs better than CNN in recognizing the studied signal's patterns.
-# It is both more accurate and more robust (less fluctuations). CNN only starts to catch up at $N \gtrsim 500$.
+#  For small datasets, XGB performs better than CNN in recognizing the studied signal's patterns.
+#  It is both more accurate and more robust (less fluctuations). CNN only starts to catch up at $N \gtrsim 500$.
 
 # %% [markdown]
-# ## Part 1b - feature interpretation
+#  ## Part 1b - feature interpretation
 
 # %%
 # generate large sample
@@ -268,29 +270,28 @@ xy = pd.DataFrame({i + 1: x[feat] for i, feat in zip(range(num), features)} | {"
 sns.pairplot(xy, hue="y", palette=sns.color_palette("husl", 3))
 plt.show()
 
+# %% [markdown]
+#  The most relevant features for classification appear to be of type (0 <= L < H <= 1)
+#
+#  `x__change_quantiles__f_agg_"var"__isabs_False__qh_`H`__ql_`L
+#
+#  These features are computed by:
+#  - Selecting the slice of the signal where it's value is enclosed between the L and the H quatiles
+#  - Evaluating the differences of the signal values at consecutive timestamps
+#  - Computing the variance of said differences
+#
+#  Signals with labels 0 and 2 are expected to have larger variances in the
+#  lower and upper part of their spectrum respectively. Inded, as shown by the plot,
+#  - L ~ 0, H ~ 1 (feature 3), signle out signals of class 1 (lower variance)
+#  - H < ~0.5 (features 2, 4),  signle out signals of class 0 (higher variance)
+#  - L > ~0.5 (feature 1),  signle out signals of class 2 (higher variance)
 
 # %% [markdown]
-# The most relevant features for classification appear to be of type (0 <= L < H <= 1)
-#
-# `x__change_quantiles__f_agg_"var"__isabs_False__qh_`H`__ql_`L
-#
-# These features are computed by:
-# - Selecting the slice of the signal where it's value is enclosed between the L and the H quatiles
-# - Evaluating the differences of the signal values at consecutive timestamps
-# - Computing the variance of said differences
-#
-# Signals with labels 0 and 2 are expected to have larger variances in the
-# lower and upper part of their spectrum respectively. Inded, as shown by the plot,
-# - L ~ 0, H ~ 1 (feature 3), signle out signals of class 1 (lower variance)
-# - H < ~0.5 (features 2, 4),  signle out signals of class 0 (higher variance)
-# - L > ~0.5 (feature 1),  signle out signals of class 2 (higher variance)
-
+#  ## Part 2: two dimensional data
 
 # %% [markdown]
-# ## Part 2: two dimensional data
+#  ### Common parameters for the trainings
 
-# %% [markdown]
-# ### Common parameters for the trainings
 # %%
 generate_params = {
     "N": 2000,
@@ -300,20 +301,21 @@ generate_params = {
 model_params = {
     "seed": 1,
     "objective": "binary:logistic",
+    "eval_metric": ["logloss"],  # supress warnings
     "n_estimators": 50,  # number of trees
     "max_depth": 8,  # depth of the trees
     "reg_lambda": 0.001,  # L1/L2 parameter penalty
     "gamma": 0.0,  # leaf penalty
     "use_label_encoder": False,
 }
+
+# %% [markdown]
+#  ### Functions
+
+# %% [markdown]
+#  #### Generating the data
+
 # %%
-# %% [markdown]
-# ### Functions
-
-# %% [markdown]
-# #### Generating the data
-
-
 def generate_2D_data(N, box, seed=None):
     rng = np.random.default_rng(seed)
     x = box * (rng.random((N, 2)) - 0.5)
@@ -329,9 +331,9 @@ def generate_2D_data(N, box, seed=None):
 
 
 # %% [markdown]
-# #### Plotting the model performance
+#  #### Plotting the model performance
 
-
+# %%
 def gridplot(grid_search):
     df = pd.DataFrame(grid_search.cv_results_).pivot(
         *[f"param_{k}" for k in reversed(grid_search.param_grid)],
@@ -358,13 +360,18 @@ def gridplot(grid_search):
 
 
 # %% [markdown]
-# ## Setup
+#  ## Setup
 
+# %%
 data = generate_2D_data(**generate_params)
 model = xgb.XGBClassifier(**model_params)
 
 # %% [markdown]
-# ## trees & leaves number
+#  ## trees & leaves number
+
+# %%
+# %%capture --no-display
+# uncomment previous line to suppress output
 
 grid_params = {
     "n_estimators": np.logspace(0.5, 2, 6, dtype=int),  # number of trees
@@ -374,9 +381,12 @@ grid_search = GridSearchCV(model, grid_params, n_jobs=-1, cv=10)  # black magic
 grid_search.fit(*data)
 gridplot(grid_search)
 
-
 # %% [markdown]
-# ## leaf & parameter penalties
+#  ## leaf & parameter penalties
+
+# %%
+# %%capture --no-display
+# uncomment previous line to suppress output
 
 grid_params = {
     "gamma": np.logspace(-1, 2, 4),  # leaf penalty
@@ -386,7 +396,5 @@ grid_search = GridSearchCV(model, grid_params, n_jobs=-1, cv=10)  # black magic
 grid_search.fit(*data)
 gridplot(grid_search)
 
-
-# %%HTML
-# <iframe width="560" height="315" frameborder=0 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?start=43&autoplay=1"></iframe>
 # %%
+# <iframe width="560" height="315" frameborder=0 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?start=43&autoplay=1"></iframe>
