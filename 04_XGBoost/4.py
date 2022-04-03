@@ -237,8 +237,8 @@ plt.legend(loc="lower right")
 plt.show()
 
 # %% [markdown]
-# For small datasets, XGB performs better than CNN in recognizing the studied singal's patterns.
-# It is both more accurate and more robust (less fluctuations). CNN only starts to catch up at N > ~500.
+# For small datasets, XGB performs better than CNN in recognizing the studied signal's patterns.
+# It is both more accurate and more robust (less fluctuations). CNN only starts to catch up at $N \gtrsim 500$.
 
 # %% [markdown]
 # ## Part 1b - feature interpretation
